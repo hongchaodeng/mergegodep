@@ -92,6 +92,20 @@ func main() {
 			}
 		}
 
+		// TODO: we should also check if it's a file
+		_, err = os.Stat(dstFolder)
+		if err != nil {
+			if os.IsNotExist(err) {
+				log.Printf("mkdir -p %s", dstFolder)
+				err = exec.Command("mkdir", "-p", dstFolder).Run()
+				if err != nil {
+					panic(err)
+				}
+			} else {
+				panic(err)
+			}
+		}
+
 		log.Printf("cp -rf %s/ %s/", srcFolder, dstFolder)
 		err = exec.Command("cp", "-rf", srcFolder+"/", dstFolder+"/").Run()
 		if err != nil {
